@@ -1,3 +1,13 @@
+CREATE TABLE IF NOT EXISTS "creator_requests" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" integer,
+	"ma_address" varchar,
+	"role" varchar DEFAULT 'user',
+	"status" varchar DEFAULT 'pending',
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "events" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"event_id" varchar,
@@ -16,6 +26,7 @@ CREATE TABLE IF NOT EXISTS "games" (
 	"name" varchar,
 	"type" varchar,
 	"description" varchar,
+	"isApproved" boolean DEFAULT false,
 	"created_at" timestamp DEFAULT now(),
 	CONSTRAINT "games_game_id_unique" UNIQUE("game_id"),
 	CONSTRAINT "games_game_token_unique" UNIQUE("game_token"),
@@ -29,6 +40,7 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 	"to_user" integer,
 	"event_id" integer,
 	"transaction_hash" varchar,
+	"transaction_chain" varchar,
 	"amount" varchar,
 	"from" varchar,
 	"to" varchar,
@@ -39,7 +51,7 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 CREATE TABLE IF NOT EXISTS "user_games" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer,
-	"event_id" integer,
+	"game_id" integer,
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
@@ -50,9 +62,17 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"device_id" varchar,
 	"role" varchar DEFAULT 'user',
 	"sa_address" varchar,
+	"ma_address" varchar NOT NULL,
 	"created_at" timestamp DEFAULT now(),
-	CONSTRAINT "users_user_id_unique" UNIQUE("user_id")
+	CONSTRAINT "users_user_id_unique" UNIQUE("user_id"),
+	CONSTRAINT "users_ma_address_unique" UNIQUE("ma_address")
 );
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "creator_requests" ADD CONSTRAINT "creator_requests_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "events" ADD CONSTRAINT "events_game_id_games_id_fk" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id") ON DELETE no action ON UPDATE no action;
@@ -97,7 +117,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user_games" ADD CONSTRAINT "user_games_event_id_games_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."games"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "user_games" ADD CONSTRAINT "user_games_game_id_games_id_fk" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

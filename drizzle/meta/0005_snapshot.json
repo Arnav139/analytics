@@ -1,6 +1,6 @@
 {
-  "id": "b8680ad3-2db5-47fa-9fe1-0464d40e64f7",
-  "prevId": "3d1d0f19-afb1-4230-9894-928be7c0cd77",
+  "id": "733a13f5-d541-4fc0-9d81-0b566a5febf0",
+  "prevId": "b8680ad3-2db5-47fa-9fe1-0464d40e64f7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -16,12 +16,6 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "userId": {
-          "name": "userId",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -63,30 +57,22 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "creator_requests_user_id_users_id_fk": {
-          "name": "creator_requests_user_id_users_id_fk",
+        "creator_requests_user_id_users_user_id_fk": {
+          "name": "creator_requests_user_id_users_user_id_fk",
           "tableFrom": "creator_requests",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
           "columnsTo": [
-            "id"
+            "user_id"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "creator_requests_userId_unique": {
-          "name": "creator_requests_userId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "userId"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.events": {
       "name": "events",

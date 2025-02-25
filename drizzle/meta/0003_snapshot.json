@@ -1,9 +1,87 @@
 {
-  "id": "8082f8d7-2b4a-4417-a1fa-649a01a44620",
-  "prevId": "039df786-439c-4f8d-a21c-4448336a9862",
+  "id": "3d1d0f19-afb1-4230-9894-928be7c0cd77",
+  "prevId": "b7e4bc1c-b46c-45a8-b598-d2693202dc89",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.creator_requests": {
+      "name": "creator_requests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ma_address": {
+          "name": "ma_address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'user'"
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creator_requests_user_id_users_id_fk": {
+          "name": "creator_requests_user_id_users_id_fk",
+          "tableFrom": "creator_requests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "creator_requests_user_id_unique": {
+          "name": "creator_requests_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id"
+          ]
+        }
+      }
+    },
     "public.events": {
       "name": "events",
       "schema": "",
@@ -329,8 +407,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "event_id": {
-          "name": "event_id",
+        "game_id": {
+          "name": "game_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -358,12 +436,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "user_games_event_id_games_id_fk": {
-          "name": "user_games_event_id_games_id_fk",
+        "user_games_game_id_games_id_fk": {
+          "name": "user_games_game_id_games_id_fk",
           "tableFrom": "user_games",
           "tableTo": "games",
           "columnsFrom": [
-            "event_id"
+            "game_id"
           ],
           "columnsTo": [
             "id"
@@ -416,6 +494,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "ma_address": {
+          "name": "ma_address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -433,6 +517,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "user_id"
+          ]
+        },
+        "users_ma_address_unique": {
+          "name": "users_ma_address_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ma_address"
           ]
         }
       }

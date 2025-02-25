@@ -1,9 +1,79 @@
 {
-  "id": "9b285f78-b9a5-470e-88c2-68ee719cd811",
+  "id": "89b329c0-36c3-4056-86b9-ddc147daa2fc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.creator_requests": {
+      "name": "creator_requests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ma_address": {
+          "name": "ma_address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'user'"
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "creator_requests_user_id_users_id_fk": {
+          "name": "creator_requests_user_id_users_id_fk",
+          "tableFrom": "creator_requests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.events": {
       "name": "events",
       "schema": "",
@@ -119,6 +189,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "isApproved": {
+          "name": "isApproved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -204,6 +281,12 @@
         },
         "transaction_hash": {
           "name": "transaction_hash",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transaction_chain": {
+          "name": "transaction_chain",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -316,8 +399,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "event_id": {
-          "name": "event_id",
+        "game_id": {
+          "name": "game_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -345,12 +428,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "user_games_event_id_games_id_fk": {
-          "name": "user_games_event_id_games_id_fk",
+        "user_games_game_id_games_id_fk": {
+          "name": "user_games_game_id_games_id_fk",
           "tableFrom": "user_games",
           "tableTo": "games",
           "columnsFrom": [
-            "event_id"
+            "game_id"
           ],
           "columnsTo": [
             "id"
@@ -403,6 +486,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "ma_address": {
+          "name": "ma_address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -420,6 +509,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "user_id"
+          ]
+        },
+        "users_ma_address_unique": {
+          "name": "users_ma_address_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ma_address"
           ]
         }
       }
